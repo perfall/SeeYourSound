@@ -108,9 +108,8 @@ class SOM(object):
             #Finally, the op that will use learning_rate_op to update
             #the weightage vectors of all neurons based on a particular
             #input
-            learning_rate_multiplier = tf.stack([tf.tile(tf.slice(
-                learning_rate_op, np.array([i]), np.array([1])), [dim])
-                                               for i in range(m*n)])
+            learning_rate_multiplier = tf.reshape(learning_rate_op, [self._m * self._n, 1])
+            
             weightage_delta = tf.multiply(
                 learning_rate_multiplier,
                 tf.subtract(tf.stack([self._vect_input for i in range(m*n)]),
