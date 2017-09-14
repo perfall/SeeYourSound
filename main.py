@@ -57,7 +57,7 @@ class Cluster:
                 self.color_index[label] = colors[v]
             except:
                 print("Can't find assigned colors")
-                self.color_index[label] = colors["blue"]
+                self.color_index[label] = "blue"
         return np.array(X_vectors), X_labels
         
     def grid_size(self, n):
@@ -109,7 +109,7 @@ class Cluster:
             ax.scatter(x, y, color=self.color_index[label]) # plot
             ax.annotate(label[:2], xy=(x, y), xytext=(0, 0), textcoords='offset points')
         if self.sound_path:
-            fig.canvas.mpl_connect('button_press_event', onclick)
+            fig.canvas.mpl_connect('motion_notify_event', onclick)
         plt.show()
 
     def calc_nearest_point(self, node, nodes):
