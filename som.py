@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import time
 
 class SOM(object):
     """
@@ -150,6 +151,8 @@ class SOM(object):
         #Training iterations
         for iter_no in range(self._n_iterations):
             #Train with each vector one by one
+            print(time.localtime()[3:5])
+            print(iter_no, " / ", self._n_iterations)
             for input_vect in input_vects:
                 self._sess.run(self._training_op,
                                feed_dict={self._vect_input: input_vect,

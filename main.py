@@ -10,6 +10,8 @@ from sklearn.decomposition import PCA
 import random
 from som import SOM # File som.py should be in folder
 import unicodedata
+import time
+import pickle
 
 
 class Cluster:
@@ -18,6 +20,7 @@ class Cluster:
         self.colors = "aqua beige black blue brown chartreuse coral crimson cyan gold green indigo lavender lime magenta olive orange pink red tan yellow".split()
         self.color_index = {}
         self.sound_path = False
+        self.new_file =  "saved_plots/" + "-".join([str(el) for el in time.localtime()[0:5]]) + ".txt"
 
     def load_data(self, spec_path, sound_path, subset):
         """
@@ -38,52 +41,23 @@ class Cluster:
             X_vectors.append(np.array(current_spectrogram.getdata()))
             X_labels.append(file[:-4])
 
+        # Load colors
+        colors = {}
+        with open("colors.txt", "r") as file:
+            for line in file:
+                print(line.split())
+                colors[line.split()[0]] = line.split()[1]
+
+
         # Assign colors to vowels, specifically adjusted for one's data
+        
         for label in X_labels:
             v = label.split("_")[0]
-            if "IS" in v:
-                self.color_index[label] = self.colors[0]
-            elif "AS" in v:
-                self.color_index[label] = self.colors[1]
-            elif "ÅL" in v:
-                self.color_index[label] = self.colors[2]
-            elif "AL" in v:
-                self.color_index[label] = self.colors[3]
-            elif "ÖS" in v:
-                self.color_index[label] = self.colors[4]
-            elif "ÅS" in v:
-                self.color_index[label] = self.colors[5]
-            elif "EL" in v:
-                self.color_index[label] = self.colors[6]
-            elif "OL" in v:
-                self.color_index[label] = self.colors[7]
-            elif "SW" in v:
-                self.color_index[label] = self.colors[8]
-            elif "US" in v:
-                self.color_index[label] = self.colors[9]
-            elif "OS" in v:
-                self.color_index[label] = self.colors[10]
-            elif "UL" in v:
-                self.color_index[label] = self.colors[11]
-            elif "RL" in v:
-                self.color_index[label] = self.colors[12]
-            elif "ES" in v:
-                self.color_index[label] = self.colors[13]
-            elif "ÄL" in v:
-                self.color_index[label] = self.colors[14]
-            elif "IL" in v:
-                self.color_index[label] = self.colors[15]
-            elif "YL" in v:
-                self.color_index[label] = self.colors[16]
-            elif "ÖL" in v:
-                self.color_index[label] = self.colors[17]
-            elif "ÄS" in v:
-                self.color_index[label] = self.colors[18]
-            elif "YS" in v:
-                self.color_index[label] = self.colors[19]
-            else:
-                print(label , " - ", v, "is not a vowel")
-
+            try:
+                self.color_index[label] = colors[v]
+            except:
+                print("Can't find assigned colors")
+                self.color_index[label] = colors["blue"]
         return np.array(X_vectors), X_labels
         
     def grid_size(self, n):
@@ -126,10 +100,12 @@ class Cluster:
             print(sound_label)
             os.system(play_command)
 
+        file = open(self.new_file, "wb")
+        pickle.dump((labels, x_coords, y_coords, coords, self.sound_path, self.color_index), file)
+        file.close()
         fig = plt.figure()
         ax = fig.add_subplot(111)
         for label, x, y in zip(labels, x_coords, y_coords):
-            line = label + " " + str(x) + " " + str(y) + "\n"
             ax.scatter(x, y, color=self.color_index[label]) # plot
             ax.annotate(label[:2], xy=(x, y), xytext=(0, 0), textcoords='offset points')
         if self.sound_path:
