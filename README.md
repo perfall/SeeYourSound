@@ -65,8 +65,12 @@ python3 spec2map.py tsne test/output
 
 It might take a minute to load.
 
+## Screenshot
+![Screenshot](screenshots/example.png "Speech colored by gender")
+
 ## Acknowledgments
 
 Credit to Sachin Joglekar for the [som.py script](https://codesachin.wordpress.com/2015/11/28/self-organizing-maps-with-googles-tensorflow/).
 
-![Screenshot](screenshots/example.png "Speech colored by gender")
+
+
