@@ -1,0 +1,5 @@
+X:1000
+y:65
+ms_step:100
+output_dir:test/output
+created:Mon, 25 Sep 2017 07:15:30 +0000
