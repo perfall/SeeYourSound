@@ -29,7 +29,10 @@ def plot(labels, x_coords, y_coords, coords, sound_path, color_index):
     """
 
     # Initialize audio engine
-    sample_rate = AudioSegment.from_mp3(sound_path + os.listdir(sound_path)[0]).frame_rate
+    for f in os.listdir(sound_path): # Avoid hidden files
+        if not f.startswith('.'): 
+            sample_rate = AudioSegment.from_mp3(sound_path + f).frame_rate
+            break
     pg.mixer.init(frequency=sample_rate)
     pg.init()
     
@@ -39,8 +42,8 @@ def plot(labels, x_coords, y_coords, coords, sound_path, color_index):
         y = event.ydata
         sound_label = labels[calc_nearest_point((x, y), coords)]
         sound_file = sound_path + '/' + str(sound_label) + '.wav'
-        pg.mixer.Sound(sound_file).play()
         print("Playing: ", sound_label)
+        pg.mixer.Sound(sound_file).play()
         time.sleep(0.01) # Small pause to avoid crashing
 
     # Create plot and add datapoints

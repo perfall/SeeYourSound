@@ -70,11 +70,8 @@ def segment(sound_file, spec_file, ms_step, pix_per_s, sound_output_dir, spec_ou
     start_pixel, stop_pixel = start*pix_per_ms, stop*pix_per_ms
     spec = Image.open(spec_file)
     chopping = True
-    while chopping:
-        if stop > len(sound):
-            stop = len(sound)
-            chopping = False
-
+    while stop <= len(sound):
+        
         # Split sound
         chunk = sound[start:stop]
         chunk.export(sound_output_dir + sound_file.split("/")[-1].split(".")[0] + "_" + str(start) + "-" + str(stop) + ".wav", format="wav")
